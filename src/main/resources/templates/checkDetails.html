@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymelesf.org">
+<head>
+    <title>Список транзакций</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" />
+    <style>
+        p {padding: 0px 15px; margin:0px;}
+        h6 {font-size: 18px; margin-bottom: 10px;}
+        .container{margin-top: 2%;}
+        .client p {padding: 0px 5px;}
+        form{margin-top: 25px}
+        button{border: none; border-radius: 10px; margin-right: 20px; color: white; padding: 10px;}
+    </style>
+
+</head>
+<body>
+<div th:replace="header :: header"/>
+<div class="container">
+    <div th:each ="cf : ${check}">
+        <div style="display:flex">
+            <h6>Дата создания</h6>
+            <p th:text="${cf.dadd}" />
+        </div>
+        <div style="display:flex">
+            <h6>Статус проверки</h6>
+            <p th:text="${cf.status_check}"/>
+        </div>
+        <div style="display:flex">
+            <h6>Метка проверки</h6>
+            <p th:text="${cf.description}"/>
+        </div>
+        <div style="display:flex">
+            <h6>Отправитель</h6>
+            <div th:each ="clS : ${clSend}" style="display:flex" class="client">
+                <p th:text="${clS.name}" />
+                <p th:text="${clS.patronymic}" />
+                <p th:text="${clS.surname}" />
+            </div>
+        </div>
+        <div style="display:flex" th:each ="acS : ${accSend}">
+            <h6>БИК банка отправителя</h6>
+                <p th:text="${acS.bic}" />
+        </div>
+        <div style="display:flex">
+            <h6>Получатель</h6>
+            <div th:each ="clR : ${clRecip}" style="display: flex" class="client">
+                <p th:text="${clR.name}" />
+                <p th:text="${clR.patronymic}" />
+                <p th:text="${clR.surname}" />
+            </div>
+        </div>
+        <div style="display:flex" th:each ="acR : ${accRecip}">
+            <h6>БИК банка получателя</h6>
+                <p th:text="${acR.bic}" />
+        </div>
+        <div th:each ="tr : ${tran}">
+            <div style="display:flex">
+                <h6>Регион создания</h6>
+                <p th:text="${tr.region}"/>
+            </div>
+            <div style="display:flex">
+                <h6>Сумма транзакции</h6>
+                <p th:text="${tr.sum}"/>
+            </div>
+            <div style="display:flex">
+                <h6>Комиссия</h6>
+                <p th:text="${tr.commission}"/>
+            </div>
+            <div style="display:flex">
+                <h6>Статус выполнения транзакции</h6>
+                <p id="status" th:text="${tr.status}"/>
+            </div>
+        </div>
+
+        <form th:if="${#strings.isEmpty(cf.status_check)}" method="post">
+            <button type="submit" id="btnG" name="button" value="green" style="background: forestgreen">Фрод отсутствует</button>
+            <button type="submit" id="btnY" name="button" value="yellow" style="background: goldenrod">Предпосылки к фроду</button>
+            <button type="submit" id="btnR" name="button" value="red" style="background: firebrick">Найден фрод</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
